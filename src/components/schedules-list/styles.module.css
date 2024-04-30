@@ -1,0 +1,16 @@
+.card {
+  border: 1px solid var(--mantine-color-dark-5);
+  border-radius: 8px;
+}
+
+.cardHeader {
+  border-bottom: 1px solid var(--mantine-color-dark-5);
+}
+
+.cardHeader > span {
+  color: var(--mantine-color-dark-2);
+}
+
+.cardHeader svg {
+  color: var(--mantine-color-yellow-3);
+}

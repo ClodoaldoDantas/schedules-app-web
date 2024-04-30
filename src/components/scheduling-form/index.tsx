@@ -1,10 +1,8 @@
-import 'dayjs/locale/pt-br'
-
 import { Box, Button, Text, TextInput } from '@mantine/core'
 import { DateInput, TimeInput } from '@mantine/dates'
 import { Calendar, CircleCheckBig, Clock, UserRound } from 'lucide-react'
 
-export function ScheduleForm() {
+export function SchedulingForm() {
   return (
     <>
       <Box component="header" mb="xl">
