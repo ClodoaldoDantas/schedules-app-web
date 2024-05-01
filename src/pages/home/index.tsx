@@ -1,4 +1,4 @@
-import { Flex, Box } from '@mantine/core'
+import { Flex, Box, Container } from '@mantine/core'
 import { SchedulingForm } from '../../components/scheduling-form'
 import { SchedulesList } from '../../components/schedules-list'
 import styles from './styles.module.css'
@@ -10,9 +10,9 @@ export function Home() {
         <SchedulingForm />
       </Box>
 
-      <Box component="main" p={80} flex={1}>
+      <Container size="xl" component="main" p={80} flex={1}>
         <SchedulesList />
-      </Box>
+      </Container>
     </Flex>
   )
 }

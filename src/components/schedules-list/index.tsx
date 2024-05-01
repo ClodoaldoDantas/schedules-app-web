@@ -1,8 +1,7 @@
 import { Box, Flex, Stack, Text } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { Calendar, CloudSun, MoonStar, Sun } from 'lucide-react'
-
-import styles from './styles.module.css'
+import { ScheduleCard } from '../schedule-card'
 
 export function SchedulesList() {
   return (
@@ -30,92 +29,31 @@ export function SchedulesList() {
       </Flex>
 
       <Stack gap="md">
-        <Box className={styles.card}>
-          <Flex
-            align="center"
-            justify="space-between"
-            py={12}
-            px={20}
-            className={styles.cardHeader}
-          >
-            <Flex align="center" gap="xs">
-              <Sun size={20} />
-              <Text component="span">Manhã</Text>
-            </Flex>
+        <ScheduleCard
+          title="Manhã"
+          period="9h-12h"
+          icon={<Sun size={20} />}
+          data={[{ time: '11:00', client: 'Ryan Dorwart' }]}
+        />
 
-            <Text component="span">09h-12h</Text>
-          </Flex>
+        <ScheduleCard
+          title="Tarde"
+          period="13h-18h"
+          icon={<CloudSun size={20} />}
+          data={[
+            { time: '13:00', client: 'Livia Curtis' },
+            { time: '14:00', client: 'Randy Calzoni' },
+            { time: '16:00', client: 'Marley Franci' },
+            { time: '17:00', client: 'Jaylon Korsgaard' },
+          ]}
+        />
 
-          <Box p={20}>
-            <Flex align="center" gap="sm">
-              <Text fw={700}>11:00</Text>
-              <Text>Ryan Dorwart</Text>
-            </Flex>
-          </Box>
-        </Box>
-
-        <Box className={styles.card}>
-          <Flex
-            align="center"
-            justify="space-between"
-            py={12}
-            px={20}
-            className={styles.cardHeader}
-          >
-            <Flex align="center" gap="xs">
-              <CloudSun size={20} />
-              <Text component="span">Tarde</Text>
-            </Flex>
-
-            <Text component="span">13h-18h</Text>
-          </Flex>
-
-          <Box p={20}>
-            <Flex align="center" gap="sm">
-              <Text fw={700}>13:00</Text>
-              <Text>Livia Curtis</Text>
-            </Flex>
-
-            <Flex align="center" gap="sm">
-              <Text fw={700}>14:00</Text>
-              <Text>Randy Calzoni</Text>
-            </Flex>
-
-            <Flex align="center" gap="sm">
-              <Text fw={700}>16:00</Text>
-              <Text>Marley Franci</Text>
-            </Flex>
-
-            <Flex align="center" gap="sm">
-              <Text fw={700}>17:00</Text>
-              <Text>Jaylon Korsgaard</Text>
-            </Flex>
-          </Box>
-        </Box>
-
-        <Box className={styles.card}>
-          <Flex
-            align="center"
-            justify="space-between"
-            py={12}
-            px={20}
-            className={styles.cardHeader}
-          >
-            <Flex align="center" gap="xs">
-              <MoonStar size={20} />
-              <Text component="span">Noite</Text>
-            </Flex>
-
-            <Text component="span">19h-21h</Text>
-          </Flex>
-
-          <Box p={20}>
-            <Flex align="center" gap="sm">
-              <Text fw={700}>21:00</Text>
-              <Text>Maria Herwitz</Text>
-            </Flex>
-          </Box>
-        </Box>
+        <ScheduleCard
+          title="Noite"
+          period="19h-21h"
+          icon={<MoonStar size={20} />}
+          data={[]}
+        />
       </Stack>
     </>
   )
