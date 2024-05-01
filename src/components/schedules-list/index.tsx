@@ -1,4 +1,4 @@
-import { Box, Flex, Stack, Text } from '@mantine/core'
+import { Box, Flex, Skeleton, Stack, Text } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
@@ -35,7 +35,7 @@ export function SchedulesList() {
 
   const dateFormatted = dayjs(selectedDate).format('YYYY-MM-DD')
 
-  const { data: schedules } = useQuery({
+  const { data: schedules, isLoading } = useQuery({
     queryKey: ['schedules', dateFormatted],
     queryFn: () => fetchSchedules({ date: dateFormatted }),
   })
@@ -84,26 +84,36 @@ export function SchedulesList() {
       </Flex>
 
       <Stack gap="md">
-        <ScheduleCard
-          title="Manhã"
-          period="9h-12h"
-          icon={<Sun size={20} />}
-          data={schedulesMorning}
-        />
+        {isLoading ? (
+          <>
+            <Skeleton height={120} radius="md" />
+            <Skeleton height={120} radius="md" />
+            <Skeleton height={120} radius="md" />
+          </>
+        ) : (
+          <>
+            <ScheduleCard
+              title="Manhã"
+              period="9h-12h"
+              icon={<Sun size={20} />}
+              data={schedulesMorning}
+            />
 
-        <ScheduleCard
-          title="Tarde"
-          period="13h-18h"
-          icon={<CloudSun size={20} />}
-          data={schedulesAfternoon}
-        />
+            <ScheduleCard
+              title="Tarde"
+              period="13h-18h"
+              icon={<CloudSun size={20} />}
+              data={schedulesAfternoon}
+            />
 
-        <ScheduleCard
-          title="Noite"
-          period="19h-21h"
-          icon={<MoonStar size={20} />}
-          data={schedulesNight}
-        />
+            <ScheduleCard
+              title="Noite"
+              period="19h-21h"
+              icon={<MoonStar size={20} />}
+              data={schedulesNight}
+            />
+          </>
+        )}
       </Stack>
     </>
   )
