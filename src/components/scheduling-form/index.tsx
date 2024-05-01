@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { createScheduling } from '../../api/create-scheduling'
+import { queryClient } from '../../lib/query-client'
 
 const schedulingFormSchema = z.object({
   time: z.string().min(1, 'Horário é obrigatório'),
@@ -19,6 +20,9 @@ type SchedulingFormData = z.infer<typeof schedulingFormSchema>
 export function SchedulingForm() {
   const { mutateAsync: createSchedulingFn } = useMutation({
     mutationFn: createScheduling,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['schedules'] })
+    },
   })
 
   const [date, setDate] = useState(new Date())
@@ -26,6 +30,7 @@ export function SchedulingForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<SchedulingFormData>({
     defaultValues: {
@@ -35,12 +40,19 @@ export function SchedulingForm() {
     resolver: zodResolver(schedulingFormSchema),
   })
 
+  function resetForm() {
+    setDate(new Date())
+    reset({ time: '', client: '' })
+  }
+
   async function handleCreateScheduling(data: SchedulingFormData) {
     await createSchedulingFn({
       date: dayjs(date).format('YYYY-MM-DD'),
       time: data.time,
       client: data.client,
     })
+
+    resetForm()
   }
 
   return (
