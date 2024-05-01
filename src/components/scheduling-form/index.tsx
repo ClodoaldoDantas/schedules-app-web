@@ -1,10 +1,13 @@
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Button, Text, TextInput } from '@mantine/core'
 import { DateInput, TimeInput } from '@mantine/dates'
+import { useMutation } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import { Calendar, CircleCheckBig, Clock, UserRound } from 'lucide-react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { createScheduling } from '../../api/create-scheduling'
 
 const schedulingFormSchema = z.object({
   time: z.string().min(1, 'Horário é obrigatório'),
@@ -14,6 +17,10 @@ const schedulingFormSchema = z.object({
 type SchedulingFormData = z.infer<typeof schedulingFormSchema>
 
 export function SchedulingForm() {
+  const { mutateAsync: createSchedulingFn } = useMutation({
+    mutationFn: createScheduling,
+  })
+
   const [date, setDate] = useState(new Date())
 
   const {
@@ -29,10 +36,8 @@ export function SchedulingForm() {
   })
 
   async function handleCreateScheduling(data: SchedulingFormData) {
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    console.log({
-      date: date.toISOString(),
+    await createSchedulingFn({
+      date: dayjs(date).format('YYYY-MM-DD'),
       time: data.time,
       client: data.client,
     })
