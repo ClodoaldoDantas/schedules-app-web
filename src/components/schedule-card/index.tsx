@@ -40,7 +40,7 @@ export function ScheduleCard({ title, period, icon, data }: ScheduleCardProps) {
         )}
 
         {data.map((item) => (
-          <Flex align="center" gap="sm">
+          <Flex key={item.client} align="center" gap="sm">
             <Text fw={700}>{item.time}</Text>
             <Text>{item.client}</Text>
           </Flex>
