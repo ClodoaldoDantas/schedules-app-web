@@ -4,31 +4,9 @@ import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { Calendar, CloudSun, MoonStar, Sun } from 'lucide-react'
 import { useState } from 'react'
-import { Scheduling, fetchSchedules } from '../../api/fetch-schedules'
+import { fetchSchedules } from '../../api/fetch-schedules'
+import { filterSchedulesByPeriod } from '../../utils/filter-schedules-by-period'
 import { ScheduleCard } from '../schedule-card'
-
-const convertHourToMinutesNumber = (hour: number) => hour * 60
-
-function filterSchedulesByPeriod({
-  data,
-  fromHour,
-  toHour,
-}: {
-  data?: Scheduling[]
-  fromHour: number
-  toHour: number
-}) {
-  if (!data) {
-    return []
-  }
-
-  const from = convertHourToMinutesNumber(fromHour)
-  const to = convertHourToMinutesNumber(toHour)
-
-  return data.filter((scheduling) => {
-    return scheduling.time >= from && scheduling.time <= to
-  })
-}
 
 export function SchedulesList() {
   const [selectedDate, setSelectedDate] = useState(new Date())

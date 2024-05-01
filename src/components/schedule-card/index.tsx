@@ -1,24 +1,15 @@
-import { ReactNode } from 'react'
 import { Box, Flex, Text } from '@mantine/core'
-import styles from './styles.module.css'
 import { AlertCircle } from 'lucide-react'
+import { ReactNode } from 'react'
 import { Scheduling } from '../../api/fetch-schedules'
+import { convertMinutesToHour } from '../../utils/convert-minutes-to-hour'
+import styles from './styles.module.css'
 
 interface ScheduleCardProps {
   title: string
   period: string
   icon: ReactNode
   data: Scheduling[]
-}
-
-const convertMinutesToHour = (minutes: number) => {
-  const hours = Math.floor(minutes / 60)
-  const minutesLeft = minutes % 60
-
-  const formattedHours = String(hours).padStart(2, '0')
-  const formattedMinutes = String(minutesLeft).padStart(2, '0')
-
-  return `${formattedHours}:${formattedMinutes}`
 }
 
 export function ScheduleCard({ title, period, icon, data }: ScheduleCardProps) {
