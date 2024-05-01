@@ -1,9 +1,63 @@
 import { Box, Flex, Stack, Text } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
+import { useQuery } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import { Calendar, CloudSun, MoonStar, Sun } from 'lucide-react'
+import { useState } from 'react'
+import { Scheduling, fetchSchedules } from '../../api/fetch-schedules'
 import { ScheduleCard } from '../schedule-card'
 
+const convertHourToMinutesNumber = (hour: number) => hour * 60
+
+function filterSchedulesByPeriod({
+  data,
+  fromHour,
+  toHour,
+}: {
+  data?: Scheduling[]
+  fromHour: number
+  toHour: number
+}) {
+  if (!data) {
+    return []
+  }
+
+  const from = convertHourToMinutesNumber(fromHour)
+  const to = convertHourToMinutesNumber(toHour)
+
+  return data.filter((scheduling) => {
+    return scheduling.time >= from && scheduling.time <= to
+  })
+}
+
 export function SchedulesList() {
+  const [selectedDate, setSelectedDate] = useState(new Date())
+
+  const dateFormatted = dayjs(selectedDate).format('YYYY-MM-DD')
+
+  const { data: schedules } = useQuery({
+    queryKey: ['schedules', dateFormatted],
+    queryFn: () => fetchSchedules({ date: dateFormatted }),
+  })
+
+  const schedulesMorning = filterSchedulesByPeriod({
+    data: schedules,
+    fromHour: 9,
+    toHour: 12,
+  })
+
+  const schedulesAfternoon = filterSchedulesByPeriod({
+    data: schedules,
+    fromHour: 13,
+    toHour: 18,
+  })
+
+  const schedulesNight = filterSchedulesByPeriod({
+    data: schedules,
+    fromHour: 19,
+    toHour: 21,
+  })
+
   return (
     <>
       <Flex
@@ -23,7 +77,8 @@ export function SchedulesList() {
         <DateInput
           locale="pt-br"
           leftSection={<Calendar size={18} />}
-          value={new Date()}
+          value={selectedDate}
+          onChange={(date) => setSelectedDate(date as Date)}
           mb="md"
         />
       </Flex>
@@ -33,26 +88,21 @@ export function SchedulesList() {
           title="Manhã"
           period="9h-12h"
           icon={<Sun size={20} />}
-          data={[{ time: '11:00', client: 'Ryan Dorwart' }]}
+          data={schedulesMorning}
         />
 
         <ScheduleCard
           title="Tarde"
           period="13h-18h"
           icon={<CloudSun size={20} />}
-          data={[
-            { time: '13:00', client: 'Livia Curtis' },
-            { time: '14:00', client: 'Randy Calzoni' },
-            { time: '16:00', client: 'Marley Franci' },
-            { time: '17:00', client: 'Jaylon Korsgaard' },
-          ]}
+          data={schedulesAfternoon}
         />
 
         <ScheduleCard
           title="Noite"
           period="19h-21h"
           icon={<MoonStar size={20} />}
-          data={[]}
+          data={schedulesNight}
         />
       </Stack>
     </>
