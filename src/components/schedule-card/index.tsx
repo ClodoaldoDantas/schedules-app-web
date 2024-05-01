@@ -1,5 +1,5 @@
-import { Box, Flex, Text } from '@mantine/core'
-import { AlertCircle } from 'lucide-react'
+import { ActionIcon, Box, Flex, Stack, Text, Tooltip } from '@mantine/core'
+import { AlertCircle, X } from 'lucide-react'
 import { ReactNode } from 'react'
 import { Scheduling } from '../../api/fetch-schedules'
 import { convertMinutesToHour } from '../../utils/convert-minutes-to-hour'
@@ -30,7 +30,7 @@ export function ScheduleCard({ title, period, icon, data }: ScheduleCardProps) {
         <Text component="span">{period}</Text>
       </Flex>
 
-      <Box p={20}>
+      <Stack gap="xs" p={20}>
         {data.length === 0 && (
           <Flex align="center" gap="xs">
             <AlertCircle size={20} />
@@ -39,12 +39,20 @@ export function ScheduleCard({ title, period, icon, data }: ScheduleCardProps) {
         )}
 
         {data.map((item) => (
-          <Flex key={item.client} align="center" gap="sm">
-            <Text fw={700}>{convertMinutesToHour(item.time)}</Text>
-            <Text>{item.client}</Text>
+          <Flex align="center" justify="space-between" key={item.client}>
+            <Flex align="center" gap="sm">
+              <Text fw={700}>{convertMinutesToHour(item.time)}</Text>
+              <Text>{item.client}</Text>
+            </Flex>
+
+            <Tooltip label="Cancelar Agendamento">
+              <ActionIcon variant="default" size="sm">
+                <X size={16} />
+              </ActionIcon>
+            </Tooltip>
           </Flex>
         ))}
-      </Box>
+      </Stack>
     </Box>
   )
 }
