@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { createScheduling } from '../../api/create-scheduling'
 import { queryClient } from '../../lib/query-client'
+import { toast } from 'sonner'
 
 const schedulingFormSchema = z.object({
   time: z.string().min(1, 'Horário é obrigatório'),
@@ -22,6 +23,10 @@ export function SchedulingForm() {
     mutationFn: createScheduling,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['schedules'] })
+      toast.success('Agendamento criado com sucesso')
+    },
+    onError: () => {
+      toast.error('Erro ao criar agendamento')
     },
   })
 

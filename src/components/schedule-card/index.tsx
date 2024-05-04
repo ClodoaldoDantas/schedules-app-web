@@ -7,6 +7,7 @@ import { Scheduling } from '../../api/fetch-schedules'
 import { queryClient } from '../../lib/query-client'
 import { convertMinutesToHour } from '../../utils/convert-minutes-to-hour'
 import styles from './styles.module.css'
+import { toast } from 'sonner'
 
 interface ScheduleCardProps {
   title: string
@@ -20,6 +21,10 @@ export function ScheduleCard({ title, period, icon, data }: ScheduleCardProps) {
     mutationFn: deleteScheduling,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['schedules'] })
+      toast.success('Agendamento cancelado com sucesso')
+    },
+    onError: () => {
+      toast.error('Erro ao cancelar agendamento')
     },
   })
 
